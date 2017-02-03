@@ -11,5 +11,6 @@ public class CommonInformation {
     public static final String POST_MAN_LOGIN=COMMON+"/superbell_backend/login.php";
     public static final String POST_MAN_REGISTRATION=COMMON+"/register/user";
     public static final String GET_POST_LIST=COMMON+"/superbell_backend/getPosts.php";
+    public static final String POST_MESSAGE="";
 
 }

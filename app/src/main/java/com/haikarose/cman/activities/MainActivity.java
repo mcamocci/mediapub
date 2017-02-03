@@ -12,7 +12,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,12 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.haikarose.cman.R;
+import com.haikarose.cman.adapters.PostImageAdapter;
 import com.haikarose.cman.pojos.Post;
+import com.haikarose.cman.pojos.PostImageItem;
 import com.haikarose.cman.pojos.UserPreference;
 import com.haikarose.cman.tools.PreferenceManager;
+import com.haikarose.cman.tools.TransferrableContent;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -49,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
     public static int PERMISSION_REQUEST_CODE=2;
     public static boolean granted=false;
     private LinearLayout buttonPublish;
-
+    private RecyclerView resorcesRecyclerView;
+    private PostImageAdapter adapter;
+    private List<Object> objectsList=new ArrayList<>();
     ArrayList<String> photoPaths=null;
     ArrayList<String> docPaths=null;
     private UserPreference userPreference;
@@ -64,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         userPreference=PreferenceManager.UserStored(getBaseContext());
 
+
+        resorcesRecyclerView =(RecyclerView)findViewById(R.id.recyclerview);
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getBaseContext());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        resorcesRecyclerView.setLayoutManager(layoutManager);
+
+        adapter=new PostImageAdapter(getBaseContext(),objectsList);
+        resorcesRecyclerView.setAdapter(adapter);
 
         //the permission issue
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -117,6 +129,17 @@ public class MainActivity extends AppCompatActivity {
                 {
                     photoPaths = new ArrayList<>();
                     photoPaths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_PHOTOS));
+                    for(String photo:photoPaths)
+                    {
+                        Toast.makeText(getBaseContext(),photo,Toast.LENGTH_LONG).show();
+                        PostImageItem imageItem=new PostImageItem();
+                        imageItem.setUrl(photo);
+                        imageItem.setType(new File(photo).getName());
+                        objectsList.add(imageItem);
+
+                    }
+
+                    adapter.notifyDataSetChanged();
                 }
                 break;
             case FilePickerConst.REQUEST_CODE_DOC:
@@ -124,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     docPaths = new ArrayList<>();
                     docPaths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_DOCS));
+
                 }
                 break;
         }

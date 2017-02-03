@@ -88,50 +88,10 @@
                 android:layout_marginRight="12dp"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:layout_width="75dp"
-                        android:layout_margin="1dp"
-                        android:id="@+id/image_select_one"
-                        android:background="@drawable/plus_image"
-                        android:layout_height="75dp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:layout_width="75dp"
-                        android:layout_margin="1dp"
-                        android:id="@+id/image_select_two"
-                        android:background="@drawable/plus_image"
-                        android:layout_height="75dp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:layout_width="75dp"
-                        android:layout_margin="1dp"
-                        android:id="@+id/image_select_three"
-                        android:background="@drawable/plus_image"
-                        android:layout_height="75dp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:layout_width="75dp"
-                        android:layout_margin="1dp"
-                        android:id="@+id/image_select_four"
-                        android:background="@drawable/plus_image"
-                        android:layout_height="75dp" />
-                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
             </LinearLayout>
         </LinearLayout>

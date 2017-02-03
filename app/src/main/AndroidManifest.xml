@@ -25,7 +25,12 @@
             android:name=".activities.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_splash"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
+        <activity android:name=".activities.ImageViewerActivity" />
+
+        <service
+            android:name=".UPloadFileService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
