@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">MediaLogin</string>
+    <string name="hint">category</string>
+    <string name="label">search</string>
+    <string name="photo_viewer">photo viewer</string>
+    <string name="copyrights">\u00a9 2016 Haikarose lab</string>
+    <string name="about_message">MediaLogin is the proud product of Haikarose software laboratory.</string>
+    <string name="version_title">version 1.0</string>
+    <string name="about_menu">About</string>
+    <string name="email">sb-haikarose@gmail.com</string>
+    <string name="dumy_short_text">It is a long established fact that a reader will be distracted by the readable content of a page</string>
+    <string name="native_ad_test_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="native_ad_unit_id">ca-app-pub-2816298192313243/8578109011</string>
+    <string name="forgot">Forgot password</string>
+    <string name="username">Email</string>
+    <string name="create">create account</string>
+    <string name="login_button_name">LOGIN</string>
+    <string name="password">password</string>
+    <string name="dialog_text">Note its not must to include files on your post? still want to continue.</string>
+    <string name="dialog_text_one">Do you real want to upload the stated post?</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
