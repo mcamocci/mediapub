@@ -11,26 +11,34 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity" />
+        <!-- <activity android:name=".activities.MainActivity" /> -->
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.ReportProblemActivity" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.ImageViewerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_splash"
             android:theme="@style/FullscreenTheme" />
-        <activity android:name=".activities.ImageViewerActivity" />
+        <!-- <activity android:name=".activities.SplashScreen" /> -->
 
         <service
             android:name=".UPloadFileService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.Bottom"
+            android:label="@string/title_activity_bottom" />
+        <activity
+            android:name=".activities.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

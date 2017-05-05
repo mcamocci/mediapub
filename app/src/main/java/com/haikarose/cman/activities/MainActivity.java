@@ -3,44 +3,52 @@ package com.haikarose.cman.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haikarose.cman.R;
+import com.haikarose.cman.UPloadFileService;
 import com.haikarose.cman.adapters.PostImageAdapter;
 import com.haikarose.cman.pojos.Post;
 import com.haikarose.cman.pojos.PostImageItem;
 import com.haikarose.cman.pojos.UserPreference;
+import com.haikarose.cman.tools.CommonInformation;
 import com.haikarose.cman.tools.PreferenceManager;
 import com.haikarose.cman.tools.TransferrableContent;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import java.io.BufferedWriter;
+import net.gotev.uploadservice.ContentType;
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import cz.msebera.android.httpclient.Header;
 import droidninja.filepicker.FilePickerBuilder;
@@ -54,16 +62,20 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView resorcesRecyclerView;
     private PostImageAdapter adapter;
     private List<Object> objectsList=new ArrayList<>();
+    private EditText writtenMessage;
     ArrayList<String> photoPaths=null;
     ArrayList<String> docPaths=null;
     private UserPreference userPreference;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        buttonPublish=(LinearLayout)findViewById(R.id.button_publish);
+        writtenMessage=(EditText)findViewById(R.id.written_article);
+
+        buttonPublish=(LinearLayout) findViewById(R.id.button_publish);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         userPreference=PreferenceManager.UserStored(getBaseContext());
@@ -72,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
         resorcesRecyclerView =(RecyclerView)findViewById(R.id.recyclerview);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        resorcesRecyclerView.setLayoutManager(layoutManager);
+       /* resorcesRecyclerView.setLayoutManager(layoutManager);
 
         adapter=new PostImageAdapter(getBaseContext(),objectsList);
-        resorcesRecyclerView.setAdapter(adapter);
+        resorcesRecyclerView.setAdapter(adapter);*/
 
         //the permission issue
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -87,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        ImageView button=(ImageView)findViewById(R.id.add_file);
+        LinearLayout button=(LinearLayout)findViewById(R.id.add_file);
         button.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -139,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-                    adapter.notifyDataSetChanged();
+//                    adapter.notifyDataSetChanged();
                 }
                 break;
             case FilePickerConst.REQUEST_CODE_DOC:
@@ -147,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
                 {
                     docPaths = new ArrayList<>();
                     docPaths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_DOCS));
-
                 }
                 break;
         }
@@ -179,65 +190,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    //login//
-    public void doTask(final String url, final String content,List<String> files){
-
-        AsyncHttpClient client=new AsyncHttpClient();
-        RequestParams params=new RequestParams();
-        params.put(Post.USER_ID,userPreference.getId());
-        params.put(Post.CONTENT,content);
-        if(!(files==null)){
-            for(String file:files){
-                try {
-                    params.put(Post.RESOURCES,getFile(file));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
-        client.post(getBaseContext(), url, params, new TextHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-                super.onStart();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                if(Integer.parseInt(responseString)==1){
-                    Toast.makeText(getBaseContext(),"Your post has been uploaded",Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(getBaseContext(),"Your post has failed to be uploaded",Toast.LENGTH_LONG).show();
-                }
-
-
-            }
-        });
-    }
-
-    private File getFile(String name) {
-        File file = new File(name);
-        if (!file.exists()) {
-            BufferedWriter output = null;
-            try {
-                output = new BufferedWriter(new FileWriter(file));
-                output.write(name);
-                output.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return file;
-    }
-
     public  void showNetDialog(final Context context, String title){
 
         final Dialog dialog = new Dialog(this);
@@ -253,20 +205,60 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                FilePickerBuilder.getInstance().setMaxCount(10)
-                        .setSelectedFiles(docPaths)
-                        .setActivityTheme(R.style.AppTheme)
-                        .pickPhoto(MainActivity.this);//pickDocument(MainActivity.this);
+
+                Intent intent=new Intent(getBaseContext(), UPloadFileService.class);
+                Post post=new Post();
+                post.setContent(writtenMessage.getText().toString());
+                post.setDate(new Date().toString());
+                List<PostImageItem> imagesItem=new ArrayList<>();
+                if(photoPaths!=null){
+
+                    //uploadMultipart();
+                   /* if(photoPaths.size()>0){
+                        for(String item:photoPaths){
+                            PostImageItem imageItem=new PostImageItem();
+                            imageItem.setUrl(item);
+                            imageItem.setType(item);
+                            imagesItem.add(imageItem);
+                        }
+                        post.setResourcesList(imagesItem);
+                    }*/
+                }
+
+                if(photoPaths==null){
+                    uploadMultipart();
+                   /* publishNoResource(getBaseContext(), CommonInformation.POST_MESSAGE,
+                            writtenMessage.getText().toString().trim());*/
+                }else{
+                    uploadMultipart();
+                }
+/*
+                intent.putExtra(Post.EXCHANGE_ID, TransferrableContent.toJsonObject(post));
+                startService(intent)*/;
+                Toast.makeText(getBaseContext(), "Please wait while we publish", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
+
+
             }
         });
         cancel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                Toast.makeText(getBaseContext(),"hey",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
         });
-        dialog.show();
+
+        if(writtenMessage!=null){
+            if(writtenMessage.getText().toString().length()>6){
+                dialog.show();
+            }else{
+                Toast.makeText(getBaseContext(), "Your post description is too short", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(getBaseContext(),"You must include a message",Toast.LENGTH_LONG).show();
+        }
+
     }
 
     public  void showPhotoNetDialog(final Context context, String title){
@@ -299,4 +291,73 @@ public class MainActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
+    public void publishNoResource(final Context context, String url,String content){
+
+        AsyncHttpClient httpClient=new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("USER_ID",1);
+        params.put("CONTENT",content);
+        progress= ProgressDialog.show(MainActivity.this,"Please wait",
+                "performing reset action", false);
+
+        progress.show();
+
+
+        httpClient.post(context,url, params,new TextHttpResponseHandler() {
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progress.dismiss();
+                Toast.makeText(context,"Please try again later",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                progress.dismiss();
+                Log.e("response",responseString);
+                if(responseString.length()<8){
+                    Snackbar.make(buttonPublish,
+                            "Failed to publish , try again later"
+                            ,Snackbar.LENGTH_LONG).show();
+                }else{
+                    Snackbar.make(buttonPublish,"published",Snackbar.LENGTH_LONG).show();
+                    Log.e("response",responseString);
+
+                }
+
+
+            }
+        });
+
+    }
+
+    public void uploadMultipart() {
+
+
+        //Uploading code
+        try {
+            String uploadId = UUID.randomUUID().toString();
+
+            UploadNotificationConfig uploadNotificationConfig=new UploadNotificationConfig();
+            uploadNotificationConfig.setTitle("Completed");
+            uploadNotificationConfig.setCompletedIconColor(android.R.color.holo_red_dark);
+            uploadNotificationConfig.setCompletedMessage("The posting process were completed");
+            //Creating a multi part request
+            new MultipartUploadRequest(this, uploadId,CommonInformation.POST_MESSAGE)
+                    //.addFileToUpload(path, "image") //Adding file
+                    .addParameter("USER_ID","1") //Adding text parameter to the request
+                    .addFileToUpload(photoPaths.get(0),"RESOURCES[]")
+                    .addFileToUpload(photoPaths.get(1),"RESOURCES[]")
+                    .addParameter("CONTENT",writtenMessage.getText().toString().trim()) //Adding text parameter to the request
+                    .setNotificationConfig(uploadNotificationConfig)
+                    .setMaxRetries(2)
+                    .startUpload(); //Starting the upload
+
+        } catch (Exception exc) {
+            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

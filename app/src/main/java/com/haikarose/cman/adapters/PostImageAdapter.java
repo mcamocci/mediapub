@@ -3,6 +3,7 @@ package com.haikarose.cman.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,7 @@ public class PostImageAdapter extends RecyclerView.Adapter<PostImageAdapter.Item
                 try {
 
                     URL url = new URL(postImageItem.getUrl());
+                    Log.e("the url ",url.toString());
                     Glide.with(firstContext).load(url.toString()).centerCrop().placeholder(android.R.drawable.editbox_dropdown_light_frame).into(promoImage);
 
                 } catch (MalformedURLException e) {

@@ -6,7 +6,7 @@
     <item android:title="Report Problem"
         app:showAsAction="always"
         android:id="@+id/logout"
-        android:icon="@drawable/ic_action_exit"
+        android:icon="@drawable/ic_exit_to_app"
         />
     <item android:title="About"
         app:showAsAction="never"

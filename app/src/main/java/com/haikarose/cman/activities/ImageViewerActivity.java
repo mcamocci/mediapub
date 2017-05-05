@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.haikarose.cman.R;
 import com.haikarose.cman.pojos.PostImageItem;
 import com.haikarose.cman.tools.TransferrableContent;
@@ -25,9 +23,7 @@ public class ImageViewerActivity extends AppCompatActivity {
 
 
     DownloadManager downloadManager;
-    private RewardedVideoAd rewardedVideoAd;
     private PostImageItem postImageItem;
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -15,14 +15,5 @@
         android:background="@android:color/black"
         android:id="@+id/imageView2" />
 
-    <com.google.android.gms.ads.AdView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-2816298192313243/8353065810"
-        android:layout_marginBottom="14dp"
-        android:id="@+id/adView2" />
 
 </RelativeLayout>

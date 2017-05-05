@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">MediaLogin</string>
+    <string name="app_name">PrimeAdmin</string>
     <string name="hint">category</string>
     <string name="label">search</string>
     <string name="photo_viewer">photo viewer</string>
     <string name="copyrights">\u00a9 2016 Haikarose lab</string>
-    <string name="about_message">MediaLogin is the proud product of Haikarose software laboratory.</string>
+    <string name="about_message">PrimeAdmin is the proud product of Haikarose software laboratory.</string>
     <string name="version_title">version 1.0</string>
     <string name="about_menu">About</string>
     <string name="email">sb-haikarose@gmail.com</string>
@@ -21,4 +21,14 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_bottom">Bottom</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
